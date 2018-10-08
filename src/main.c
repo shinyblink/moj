@@ -101,6 +101,8 @@ int main(int argc, char* argv[]) {
 			}
 			if (attention && start < len)
 				fprintf(stdout, "%s", s + start);
+
+			fprintf(stdout, sep ? sep : " ");
 		}
 		fprintf(stdout, "\n");
 		break;
