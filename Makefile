@@ -34,4 +34,4 @@ moj: src/main.c src/emoji.o
 
 # Cleanup
 clean:
-	rm -f moj gen/emoji_list.h gen/lookup.c gen/emoji.gperf
+	rm -f moj gen/lookup.c

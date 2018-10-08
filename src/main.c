@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 			mode = MODE_LOOKUP;
 			break;
 		case 's':
-			sep = strdup(optarg);
+			sep = optarg;
 			break;
 		}
 	}
@@ -102,12 +102,12 @@ int main(int argc, char* argv[]) {
 			if (attention && start < len)
 				fprintf(stdout, "%s", s + start);
 
-			fprintf(stdout, sep ? sep : " ");
+			if (argi < (argc - 1))
+				fprintf(stdout, sep ? sep : " ");
 		}
 		fprintf(stdout, "\n");
 		break;
 	}
 
-	if (sep) free(sep);
 	return 0;
 }
