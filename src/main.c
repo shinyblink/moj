@@ -84,13 +84,13 @@ int main(int argc, char* argv[]) {
 						char* found = emoji_lookup(s + start + 1, ci - start - 1);
 						if (found) {
 							fprintf(stdout, "%s", found);
-							attention = 0;
 						} else {
 							// not an emoji? oops.
 							fprintf(stdout, "%s:", s + start);
 							start = ci;
 							// the next might be one, though..
 						}
+						attention = 0;
 					}
 				} else if (c == ':' && ci < len) {
 					attention = 1;
