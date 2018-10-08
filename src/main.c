@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			if (attention && start < len)
-				fprintf(stdout, "%s", s + start);
+				fprintf(stdout, "%s", s + start + 1);
 
 			if (argi < (argc - 1))
 				fprintf(stdout, sep ? sep : " ");
