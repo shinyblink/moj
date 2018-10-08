@@ -12,9 +12,9 @@
 void usage(char* name, int fail) {
 	FILE* f = stdout;
 	if (fail) f = stderr;
-	fprintf(f, "Usage: %s [-e emoji] <:emoji: text>\n"
+	fprintf(f, "Usage: %s [-s sep] [-e] <:emoji: text>\n"
 	           "  -e: lookup mode - interpret arguments as emoji names\n"
-	           "    -s <sep>: use custom seperator in lookup mode\n", name);
+	           "  -s <sep>: use custom seperator\n", name);
 	exit(fail);
 }
 
@@ -57,13 +57,52 @@ int main(int argc, char* argv[]) {
 				printf("%s%s", found, sep ? sep : "\n");
 			} else {
 				printf("Couldn't find %s. :(\n", argv[argi]);
+				return 1;
 			}
 		}
 		if (sep) printf("\n");
 		break;
 	case MODE_NORMAL:
-		fprintf(stderr, "NYI. Sorry.\n");
-		return 1;
+		for (argi = optind; argi < argc; argi++) {
+			char* s = argv[argi];
+			char c;
+			int ci;
+			int len = strlen(s);
+			int start = 0;
+			int attention = 0;
+			for (ci = 0; ci <= len; ci++) {
+				c = s[ci];
+
+				if (attention) { // in :
+					if (c == ' ') {
+						attention = 0;
+						s[ci] = 0;
+						fprintf(stdout, "%s ", s + start);
+					} else if (c == ':') {
+						// check if start to ci - start -1 is a valid emoji.
+						s[ci] = 0;
+						char* found = emoji_lookup(s + start + 1, ci - start - 1);
+						if (found) {
+							fprintf(stdout, "%s", found);
+							attention = 0;
+						} else {
+							// not an emoji? oops.
+							fprintf(stdout, "%s:", s + start);
+							start = ci;
+							// the next might be one, though..
+						}
+					}
+				} else if (c == ':' && ci < len) {
+					attention = 1;
+					start = ci;
+				} else {
+					putc(c, stdout);
+				}
+			}
+			if (attention && start < len)
+				fprintf(stdout, "%s", s + start);
+		}
+		fprintf(stdout, "\n");
 		break;
 	}
 
