@@ -298,7 +298,6 @@ man_raising_hand, 237
 woman_raising_hand, 238
 person_bowing, 239
 bowing, 239
-bow, 239
 man_bowing, 240
 woman_bowing, 241
 person_facepalming, 242
@@ -364,7 +363,6 @@ skier, 282
 snowboarder, 283
 person_golfing, 284
 golfing, 284
-golf, 284
 man_golfing, 285
 woman_golfing, 286
 person_surfing, 287
@@ -1089,6 +1087,7 @@ boxing_glove, 953
 gi, 954
 martial_arts_uniform, 954
 goal, 955
+golf, 956
 ice_skate, 957
 fishing_pole, 958
 running_shirt, 959
@@ -1274,6 +1273,7 @@ dagger, 1125
 crossed_swords, 1126
 gun, 1127
 pistol, 1127
+bow, 1128
 shield, 1129
 wrench, 1130
 nut_and_bolt, 1131

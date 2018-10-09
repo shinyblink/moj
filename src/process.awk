@@ -11,9 +11,9 @@ function didsee(name) {
 
 function hasnew() {
 	for (i = 2; i <= NF; i++)
-		if (didsee($i))
-			return 0;
-	return 1;
+		if (!didsee($i))
+			return 1;
+	return 0;
 }
 
 function newname(name) {
@@ -35,10 +35,17 @@ function prefixed(name, prefixes) {
 	return 0;
 }
 
+function inarray(name, array) {
+	for (i in array)
+		if (array[i] == name)
+			return 1;
+	return 0;
+}
+
 function noing(name) {
 	# yep thats the name.
 	len = length(name);
-	if (len > 5 && substr(name, len - 2, 3) == "ing" && !prefixed(name, persons)) {
+	if (len > 5 && substr(name, len - 2, 3) == "ing" && !prefixed(name, persons) && !inarray(name, exemptions)) {
 		if (char(name, len - 4) == char(name, len - 3)) {
 			# double letter combo, gg, nn, etc..
 			short = substr(name, 0, len - 4);
@@ -52,11 +59,17 @@ function noing(name) {
 
 BEGIN {
 	FS="\",\""
+
+	# I hate this.
 	persons[1] = "person_";
 	persons[2] = "women_";
 	persons[3] = "woman_"
 	persons[4] = "men_";
 	persons[5] = "man_";
+
+	# I hate this even more.
+	exemptions[1] = "bowing";
+	exemptions[2] = "golfing";
 }
 
 {
