@@ -15,11 +15,14 @@ Reasons to use moj instead of emojify:
 No runtime deps.
 
 To regen the emoji list you also need:
-- wget (compile time)
-- jq (compile time)
+- wget
+- jq
+- awk
 
 # Credits
-Github Gemoji's JSON file for the emoji list.
+[milesj/emojibase](https://github.com/milesj/emojibase) for the JSON Emoji list. Many thanks
+
+vifino for doing everything else.
 
 # License
 ISC.

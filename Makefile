@@ -1,15 +1,20 @@
+# moj makefile
 CC ?= cc
 
+MOJILIST=https://raw.githubusercontent.com/milesj/emojibase/master/packages/data/en/raw.json
+
+# Do not touch.
 all: moj
 
 # Generate lookup lists
 gen/emoji.json:
 	mkdir -p gen
-	wget -O $@ https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json
+	wget -O $@ ${MOJILIST}
 
 gen/emoji.csv: gen/emoji.json
-	jq -r '.[] | select(.emoji) | [.emoji] + .aliases | @csv' -- \
-		gen/emoji.json > $@
+	jq -r '.[] | select(.emoji) | [.emoji] + .shortcodes | @csv' -- \
+		gen/emoji.json | \
+		sed 's/^"//;s/"$$//' | awk -f src/process.awk > $@
 
 gen/emoji.gperf: src/gen_gperf.sh gen/emoji.csv
 	./src/gen_gperf.sh > ./gen/emoji.gperf
