@@ -40,6 +40,12 @@ libmoj.so: src/moj.o
 moj: src/main.c src/moj.o
 	$(CC) -o $@ ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} src/main.c src/moj.o
 
+# Profanity plugin.
+profanity_emoji.so: src/profanity_emoji.c src/moj.o
+	$(CC) -shared -fPIC -o $@ ${LDFLAGS} src/profanity_emoji.c src/moj.o
+
+profanity: profanity_emoji.so
+
 # Cleanup
 clean:
 	rm -f moj gen/lookup.c src/*.o

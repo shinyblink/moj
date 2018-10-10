@@ -1,5 +1,6 @@
 moj
 *.o
+*.so
 gen/lookup.c
 gen/emoji.json
 gen/emoji.csv
