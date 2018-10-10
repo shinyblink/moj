@@ -31,12 +31,15 @@ gen/lookup.c: gen/emoji.gperf
 		--output-file=$@ gen/emoji.gperf
 
 # Compile our code.
-src/emoji.o: gen/lookup.c gen/emoji_list.h
-	$(CC) -c -o $@ ${CFLAGS} ${CPPFLAGS} src/emoji.c
+src/moj.o: gen/lookup.c gen/emoji_list.h
+	$(CC) -c -o $@ ${CFLAGS} ${CPPFLAGS} src/moj.c
 
-moj: src/main.c src/emoji.o
-	$(CC) -o $@ ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} src/main.c src/emoji.o
+libmoj.so: src/moj.o
+	$(CC) -shared -fPIC -o $@ ${LDFLAGS}
+
+moj: src/main.c src/moj.o
+	$(CC) -o $@ ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} src/main.c src/moj.o
 
 # Cleanup
 clean:
-	rm -f moj gen/lookup.c
+	rm -f moj gen/lookup.c src/*.o

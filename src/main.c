@@ -4,10 +4,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <getopt.h>
-#include "emoji.h"
+#include "moj.h"
 
 #define MODE_NORMAL 0
 #define MODE_LOOKUP 1
+#define MODE_USELIBRARY 2
 
 void usage(char* name, int fail) {
 	FILE* f = stdout;
@@ -27,7 +28,7 @@ int main(int argc, char* argv[]) {
 	int opt;
 	int mode = MODE_NORMAL;
 	char* sep = NULL;
-	while ((opt = getopt(argc, argv, "hes:")) != -1) {
+	while ((opt = getopt(argc, argv, "hels:")) != -1) {
 		switch (opt) {
 		case 'h':
 			usage(argv[0], 0);
@@ -42,6 +43,9 @@ int main(int argc, char* argv[]) {
 		case 's':
 			sep = optarg;
 			break;
+		case 'l':
+			mode = MODE_USELIBRARY;
+			break;
 		}
 	}
 
@@ -52,7 +56,7 @@ int main(int argc, char* argv[]) {
 	switch (mode) {
 	case MODE_LOOKUP:
 		for (argi = optind; argi < argc; argi++) {
-			char* found = emoji_lookup(argv[argi], strlen(argv[argi]));
+			char* found = moj_lookup(argv[argi], strlen(argv[argi]));
 			if (found) {
 				printf("%s%s", found, sep ? sep : "\n");
 			} else {
@@ -81,7 +85,7 @@ int main(int argc, char* argv[]) {
 					} else if (c == ':') {
 						// check if start to ci - start -1 is a valid emoji.
 						s[ci] = 0;
-						char* found = emoji_lookup(s + start + 1, ci - start - 1);
+						char* found = moj_lookup(s + start + 1, ci - start - 1);
 						if (found) {
 							fprintf(stdout, "%s", found);
 						} else {
@@ -107,6 +111,11 @@ int main(int argc, char* argv[]) {
 		}
 		fprintf(stdout, "\n");
 		break;
+	case MODE_USELIBRARY:
+		for (argi = optind; argi < argc; argi++) {
+			printf("%s\n", moj_replace(argv[argi], strlen(argv[argi])));
+		}
+		break;;
 	}
 
 	return 0;
