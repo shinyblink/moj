@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
 				fprintf(stdout, "%s", s + start + 1);
 
 			if (argi < (argc - 1))
-				fprintf(stdout, sep ? sep : " ");
+				fputs(sep ? sep : " ", stdout);
 		}
 		fprintf(stdout, "\n");
 		break;
