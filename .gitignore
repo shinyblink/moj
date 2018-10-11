@@ -1,4 +1,5 @@
 moj
+moj.exe
 *.o
 *.so
 gen/lookup.c

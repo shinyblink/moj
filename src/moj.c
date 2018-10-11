@@ -50,11 +50,6 @@ char* moj_replace(const char* text, size_t len) {
 		}
 	}
 
-	// we need a copy.
-	char* s = strdup(text);
-	if(!s)
-		return NULL;
-
 	// allocate buffer the right size.
 	char* buf = malloc(len + 1 + size_delta);
 	if (!buf)
@@ -64,22 +59,22 @@ char* moj_replace(const char* text, size_t len) {
 	attention = 0;
 	size_t offset = 0;
 	for (ci = 0; ci <= len; ci++) {
-		c = s[ci];
+		c = text[ci];
 
 		if (attention) { // in :
 			if (c == ' ') {
 				attention = 0;
-				s[ci] = 0;
-				offset += sprintf(buf + offset, "%s ", s + start);
+				memcpy(buf + offset, text + start, ci - start + 1);
+				offset += ci - start + 1;
 			} else if (c == ':') {
 				// check if start to ci - start -1 is a valid emoji.
-				s[ci] = 0;
-				const char* found = moj_lookup(s + start + 1, ci - start - 1);
+				const char* found = moj_lookup(text + start + 1, ci - start - 1);
 				if (found) {
 					offset += sprintf(buf + offset, "%s", found);
 				} else {
 					// not an emoji? oops.
-					offset += sprintf(buf + offset, "%s:", s + start);
+					memcpy(buf + offset, text + start, ci - start + 1);
+					offset += ci - start  + 1;
 					start = ci;
 					// the next might be one, though..
 				}
@@ -93,6 +88,5 @@ char* moj_replace(const char* text, size_t len) {
 			offset++;
 		}
 	}
-	free(s);
 	return buf;
 }
