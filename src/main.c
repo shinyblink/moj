@@ -113,7 +113,9 @@ int main(int argc, char* argv[]) {
 		break;
 	case MODE_USELIBRARY:
 		for (argi = optind; argi < argc; argi++) {
-			printf("%s\n", moj_replace(argv[argi], strlen(argv[argi])));
+			char* rep = moj_replace(argv[argi], strlen(argv[argi]));
+			printf("%s\n", rep);
+			free(rep);
 		}
 		break;;
 	}

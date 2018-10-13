@@ -51,14 +51,15 @@ char* moj_replace(const char* text, size_t len) {
 	}
 
 	// allocate buffer the right size.
-	char* buf = malloc(len + 1 + size_delta);
+	size_t realsz = len + size_delta;
+	char* buf = malloc(realsz + 1);
 	if (!buf)
 		return NULL;
 
 	start = 0;
 	attention = 0;
 	size_t offset = 0;
-	for (ci = 0; ci <= len; ci++) {
+	for (ci = 0; ci < len; ci++) {
 		c = text[ci];
 
 		if (attention) { // in :
@@ -88,8 +89,10 @@ char* moj_replace(const char* text, size_t len) {
 			offset++;
 		}
 	}
-	memcpy(buf + offset, text + start, ci - start);
-	offset += ci - start;
-	buf[offset] = 0;
+	if (attention) {
+		memcpy(buf + offset, text + start, ci - start);
+		offset += ci - start;
+	}
+	buf[realsz] = 0;
 	return buf;
 }

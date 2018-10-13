@@ -31,7 +31,7 @@ gen/lookup.c: gen/emoji.gperf
 		--output-file=$@ gen/emoji.gperf
 
 # Compile our code.
-src/moj.o: gen/lookup.c gen/emoji_list.h
+src/moj.o: gen/lookup.c gen/emoji_list.h src/moj.c
 	$(CC) -c -o $@ ${CFLAGS} ${CPPFLAGS} src/moj.c
 
 libmoj.so: src/moj.o
@@ -48,4 +48,4 @@ profanity: profanity_emoji.so
 
 # Cleanup
 clean:
-	rm -f moj gen/lookup.c src/*.o
+	rm -f moj gen/lookup.c src/*.o profanity_emoji.so
