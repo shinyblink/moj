@@ -88,5 +88,8 @@ char* moj_replace(const char* text, size_t len) {
 			offset++;
 		}
 	}
+	memcpy(buf + offset, text + start, ci - start);
+	offset += ci - start;
+	buf[offset] = 0;
 	return buf;
 }
