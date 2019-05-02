@@ -4,7 +4,7 @@ CC ?= cc
 MOJILIST=https://raw.githubusercontent.com/milesj/emojibase/master/packages/data/en/raw.json
 
 # Do not touch.
-all: moj
+all: moj libmoj.so
 
 # Generate lookup lists
 gen/emoji.json:
@@ -32,28 +32,36 @@ gen/lookup.c: gen/emoji.gperf
 
 # Compile our code.
 src/moj.o: gen/lookup.c gen/emoji_list.h src/moj.c
-	$(CC) -c -o $@ ${CFLAGS} ${CPPFLAGS} src/moj.c
+	$(CC) -c ${CFLAGS} ${CPPFLAGS} -o $@ src/moj.c
 
 libmoj.so: src/moj.o
-	$(CC) -shared -fPIC -o $@ ${LDFLAGS} $<
+	$(CC) -shared -fPIC ${CFLAGS} ${CPPFLAGS} -o $@ ${LDFLAGS} $<
 
 moj: src/main.c src/moj.o
-	$(CC) -o $@ ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} $^
+	$(CC) ${CFLAGS} ${CPPFLAGS} -o $@ ${LDFLAGS} $^
 
 # Profanity plugin.
 profanity_emoji.so: src/profanity_emoji.c src/moj.o
-	$(CC) -shared -fPIC -o $@ ${LDFLAGS} $^
+	$(CC) -shared -fPIC ${CFLAGS} ${CPPFLAGS} -o $@ ${LDFLAGS} $^
 
 profanity: profanity_emoji.so
 
 # Install
-install: moj libmoj.so
+install: moj
+	install -d $(DESTDIR)/$(PREFIX)/bin
 	install moj $(DESTDIR)/$(PREFIX)/bin
+
+install-devel: libmoj.so
+	install -d $(DESTDIR)/$(PREFIX)/lib
 	install libmoj.so $(DESTDIR)/$(PREFIX)/lib
+	install -d $(DESTDIR)/$(PREFIX)/lib
+	cp src/moj.h $(DESTDIR)/$(PREFIX)/include/libmoj.h
 
 uninstall:
-	cd $(DESTDIR)/$(PREFIX)/ && rm -f bin/moj lib/libmoj.so
-	
+	rm -f $(DESTDIR)/$(PREFIX)/bin/moj
+uninstall-devel:
+	rm -f $(DESTDIR)/$(PREFIX)/lib/libmoj.so $(DESTDIR)/$(PREFIX)/include/libmoj.h
+
 
 # Cleanup
 clean:
