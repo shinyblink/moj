@@ -54,7 +54,7 @@ install: moj
 install-devel: libmoj.so
 	install -d $(DESTDIR)/$(PREFIX)/lib
 	install libmoj.so $(DESTDIR)/$(PREFIX)/lib
-	install -d $(DESTDIR)/$(PREFIX)/lib
+	install -d $(DESTDIR)/$(PREFIX)/include
 	cp src/moj.h $(DESTDIR)/$(PREFIX)/include/libmoj.h
 
 uninstall:
